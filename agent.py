@@ -2,7 +2,12 @@
 
 from agents import Agent
 
-from schemas import DevelopmentResult, ReviewResult, TechnicalRequirements
+from schemas import (
+    DevelopmentResult,
+    OrchestrationResult,
+    ReviewResult,
+    TechnicalRequirements,
+)
 from tools import (
     create_directory,
     execute_command,
@@ -59,4 +64,41 @@ reviewer_agent = Agent(
     """.strip(),
     output_type=ReviewResult,
     tools=[read_file, execute_command, run_tests],
+)
+
+
+orchestrator_agent = Agent(
+    name="Orchestrator Agent",
+    instructions="""
+    Coordina una única pasada del flujo de desarrollo de software. Conservas la
+    conversación con el usuario y debes delegar en este orden:
+
+    1. Llama a analyze_requirement con la petición original para obtener los
+       requisitos técnicos.
+    2. Llama a implement_solution y pásale los requisitos obtenidos. El
+       Developer Agent debe implementar el proyecto en workspace/.
+    3. Llama a review_implementation y pásale tanto los requisitos como el
+       resultado del desarrollo. El Reviewer Agent debe revisar el proyecto.
+
+    Usa las salidas reales de cada especialista como contexto del siguiente.
+    Devuelve un resultado estructurado que incluya las tres salidas, sin
+    inventar archivos, comandos ni resultados de tests. Si el revisor devuelve
+    CHANGES_REQUIRED, informa los hallazgos pero no pidas correcciones al
+    desarrollador todavía: el ciclo de corrección se introducirá en la fase 6.
+    """.strip(),
+    output_type=OrchestrationResult,
+    tools=[
+        analyst_agent.as_tool(
+            tool_name="analyze_requirement",
+            tool_description="Analiza una petición y devuelve requisitos técnicos estructurados.",
+        ),
+        developer_agent.as_tool(
+            tool_name="implement_solution",
+            tool_description="Implementa requisitos técnicos dentro de workspace/.",
+        ),
+        reviewer_agent.as_tool(
+            tool_name="review_implementation",
+            tool_description="Revisa una implementación frente a sus requisitos técnicos.",
+        ),
+    ],
 )

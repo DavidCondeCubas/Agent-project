@@ -60,3 +60,11 @@ class ReviewResult(BaseModel):
     security_notes: list[str] = Field(alias="securityNotes")
     test_notes: list[str] = Field(alias="testNotes")
     recommendations: list[str]
+
+
+class OrchestrationResult(BaseModel):
+    """Resultado de una pasada coordinada de análisis, desarrollo y revisión."""
+
+    analysis: TechnicalRequirements
+    development: DevelopmentResult
+    review: ReviewResult

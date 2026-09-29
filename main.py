@@ -1,22 +1,15 @@
-"""Punto de entrada de la fase 4: agentes especializados."""
+"""Punto de entrada de la fase 5: orquestación de agentes."""
 
 import os
 
 from agents import Runner
 from dotenv import load_dotenv
 
-from agent import analyst_agent, developer_agent, reviewer_agent
-
-
-SPECIALISTS = {
-    "1": ("Analyst Agent", analyst_agent),
-    "2": ("Developer Agent", developer_agent),
-    "3": ("Reviewer Agent", reviewer_agent),
-}
+from agent import orchestrator_agent
 
 
 def main() -> None:
-    """Ejecuta manualmente uno de los agentes especializados."""
+    """Coordina una pasada de análisis, desarrollo y revisión."""
     load_dotenv()
 
     if not os.getenv("OPENAI_API_KEY"):
@@ -24,33 +17,18 @@ def main() -> None:
             "Falta OPENAI_API_KEY. Añádela al archivo .env antes de ejecutar el programa."
         )
 
-    print("\nSelecciona un especialista:")
-    print("1. Analyst Agent — analiza y estructura requisitos")
-    print("2. Developer Agent — implementa requisitos en workspace/")
-    print("3. Reviewer Agent — revisa una implementación en workspace/")
-    selection = input("Opción: ").strip()
-
-    specialist = SPECIALISTS.get(selection)
-    if specialist is None:
-        print("Opción no válida.")
-        return
-
-    agent_name, selected_agent = specialist
-    request = input(
-        f"\nContexto para {agent_name} "
-        "(pega aquí requisitos, una petición o la ruta del proyecto): "
-    ).strip()
-    if not request:
-        print("No se recibió ningún contexto.")
+    requirement = input("Describe el software que quieres crear: ").strip()
+    if not requirement:
+        print("No se recibió ningún requisito.")
         return
 
     result = Runner.run_sync(
-        selected_agent,
-        request,
+        orchestrator_agent,
+        requirement,
         max_turns=20,
     )
 
-    print(f"\n--- Resultado de {agent_name} ---\n")
+    print("\n--- Resultado de la orquestación ---\n")
     print(result.final_output.model_dump_json(indent=2, by_alias=True))
 
 
