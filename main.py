@@ -22,7 +22,11 @@ def main() -> None:
         print("No se recibió ningún requisito.")
         return
 
-    result = Runner.run_sync(software_engineering_agent, requirement)
+    result = Runner.run_sync(
+        software_engineering_agent,
+        requirement,
+        max_turns=20,
+    )
 
     plan = result.final_output
 
