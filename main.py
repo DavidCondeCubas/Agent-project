@@ -24,8 +24,10 @@ def main() -> None:
 
     result = Runner.run_sync(software_engineering_agent, requirement)
 
-    print("\n--- Plan técnico ---\n")
-    print(result.final_output)
+    plan = result.final_output
+
+    print("\n--- Plan técnico estructurado ---\n")
+    print(plan.model_dump_json(indent=2, by_alias=True))
 
 
 if __name__ == "__main__":
