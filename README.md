@@ -539,6 +539,14 @@ Possible integrations:
 - Documentation systems
 - MCP servers
 
+### Implementation in this branch
+
+The Reviewer has read-only Git tools for the project in `workspace/`: repository
+status, a diff summary with whitespace checks, and configured remotes. A GitHub
+remote can therefore be observed when it exists, but the agents do not create
+commits, push changes, or alter remote configuration. Those actions require an
+explicit human decision.
+
 Example architecture:
 
 ```text

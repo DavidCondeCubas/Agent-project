@@ -8,6 +8,7 @@ from schemas import (
     ReviewResult,
     TechnicalRequirements,
 )
+from git_tools import git_diff_summary, git_remote_info, git_repository_status
 from tools import (
     create_directory,
     execute_command,
@@ -64,7 +65,14 @@ reviewer_agent = Agent(
     problemas concretos y accionables.
     """.strip(),
     output_type=ReviewResult,
-    tools=[read_file, execute_command, run_tests],
+    tools=[
+        read_file,
+        execute_command,
+        run_tests,
+        git_repository_status,
+        git_diff_summary,
+        git_remote_info,
+    ],
 )
 
 
