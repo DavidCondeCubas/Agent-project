@@ -1,15 +1,14 @@
-"""Punto de entrada de la fase 5: orquestación de agentes."""
+"""Punto de entrada de la fase 6: corrección iterativa."""
 
 import os
 
-from agents import Runner
 from dotenv import load_dotenv
 
-from agent import orchestrator_agent
+from workflow import run_development_workflow
 
 
 def main() -> None:
-    """Coordina una pasada de análisis, desarrollo y revisión."""
+    """Ejecuta el ciclo de análisis, desarrollo, revisión y corrección."""
     load_dotenv()
 
     if not os.getenv("OPENAI_API_KEY"):
@@ -22,14 +21,10 @@ def main() -> None:
         print("No se recibió ningún requisito.")
         return
 
-    result = Runner.run_sync(
-        orchestrator_agent,
-        requirement,
-        max_turns=20,
-    )
+    result = run_development_workflow(requirement)
 
-    print("\n--- Resultado de la orquestación ---\n")
-    print(result.final_output.model_dump_json(indent=2, by_alias=True))
+    print("\n--- Resultado del flujo de corrección ---\n")
+    print(result.model_dump_json(indent=2, by_alias=True))
 
 
 if __name__ == "__main__":

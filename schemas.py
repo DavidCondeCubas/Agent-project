@@ -68,3 +68,28 @@ class OrchestrationResult(BaseModel):
     analysis: TechnicalRequirements
     development: DevelopmentResult
     review: ReviewResult
+
+
+class WorkflowStatus(StrEnum):
+    APPROVED = "APPROVED"
+    MAX_RETRIES_REACHED = "MAX_RETRIES_REACHED"
+    ERROR = "ERROR"
+
+
+class CorrectionAttempt(BaseModel):
+    """Una implementación seguida de su revisión."""
+
+    cycle: int
+    development: DevelopmentResult
+    review: ReviewResult
+
+
+class WorkflowResult(BaseModel):
+    """Resultado del flujo con correcciones acotadas."""
+
+    status: WorkflowStatus
+    analysis: TechnicalRequirements
+    attempts: list[CorrectionAttempt]
+    max_correction_cycles: int = Field(alias="maxCorrectionCycles")
+    final_review: ReviewResult | None = Field(alias="finalReview")
+    error: str | None = None
