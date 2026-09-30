@@ -1,2 +1,12 @@
-.venv/
 .env
+
+# Entorno virtual creado en la raíz del proyecto.
+bin/
+include/
+lib/
+pyvenv.cfg
+
+# Archivos generados al ejecutar Python o los agentes.
+__pycache__/
+*.py[cod]
+workspace/
