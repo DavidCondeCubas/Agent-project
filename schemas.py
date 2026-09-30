@@ -28,6 +28,7 @@ class TechnicalRequirements(BaseModel):
     project_name: str = Field(alias="projectName")
     functional_requirements: list[str] = Field(alias="functionalRequirements")
     technical_requirements: list[str] = Field(alias="technicalRequirements")
+    architecture: str
     entities: list[str]
     assumptions: list[str]
 
@@ -92,4 +93,23 @@ class WorkflowResult(BaseModel):
     attempts: list[CorrectionAttempt]
     max_correction_cycles: int = Field(alias="maxCorrectionCycles")
     final_review: ReviewResult | None = Field(alias="finalReview")
+    workflow_id: str | None = Field(default=None, alias="workflowId")
+    state_file: str | None = Field(default=None, alias="stateFile")
+    error: str | None = None
+
+
+class WorkflowState(BaseModel):
+    """Memoria persistente y estructurada de una ejecución del workflow."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    workflow_id: str = Field(alias="workflowId")
+    user_requirement: str = Field(alias="userRequirement")
+    technical_requirements: TechnicalRequirements | None = Field(default=None, alias="technicalRequirements")
+    architecture_decision: str | None = Field(default=None, alias="architectureDecision")
+    generated_files: list[str] = Field(default_factory=list, alias="generatedFiles")
+    development_results: list[DevelopmentResult] = Field(default_factory=list, alias="developmentResults")
+    review_results: list[ReviewResult] = Field(default_factory=list, alias="reviewResults")
+    corrections: list[ReviewResult] = Field(default_factory=list)
+    final_status: WorkflowStatus | None = Field(default=None, alias="finalStatus")
     error: str | None = None

@@ -510,6 +510,18 @@ Instead of sending all information to every agent, the system will control what 
 - Context engineering
 - Token optimization
 
+### Implementation in this branch
+
+The workflow stores a structured JSON state after each transition in
+`.agent_state/` (ignored by Git). It retains the original requirement,
+analysis, architecture decision, generated files, development and review
+results, correction requests, and final status.
+
+Each agent receives only the context needed for its role: the Analyst receives
+the original requirement; the Developer receives the technical requirements
+and the previous review only when correcting; the Reviewer receives the
+technical requirements and the current development result.
+
 ---
 
 # Phase 8 — External Integrations

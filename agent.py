@@ -21,7 +21,8 @@ analyst_agent = Agent(
     name="Analyst Agent",
     instructions="""
     Analiza el requisito de software que proporciona el usuario y conviértelo
-    en requisitos funcionales y técnicos claros. Identifica las entidades y
+    en requisitos funcionales y técnicos claros. Define una decisión de
+    arquitectura breve y proporcional al requisito, identifica las entidades y
     declara los supuestos necesarios. No escribas código, no crees archivos,
     no ejecutes comandos y no propongas una implementación detallada.
     """.strip(),
